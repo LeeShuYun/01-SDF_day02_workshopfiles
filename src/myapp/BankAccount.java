@@ -13,7 +13,7 @@ public class BankAccount{
     private Date creationDate;
     private Date closingDate;
     
-    //constructor to set name and account number
+    //constructors ===========================================================================
     public BankAccount(String name){
         this.accountHolderName = name;
         long random = (long)(Math.random() * 10000000000000000L);
@@ -21,6 +21,15 @@ public class BankAccount{
         this.creationDate = new Date();
     }
 
+    public BankAccount(String name, Float accountBalance){
+        this.accountHolderName = name;
+        long random = (long)(Math.random() * 10000000000000000L);
+        this.accountNumber = Long.toString(random);
+        this.creationDate = new Date();
+        this.accountBalance = accountBalance;
+    }
+
+    //methods ================================================================================
     public void deposit(Float depositAmount){
         if (depositAmount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be greater than zero");
@@ -28,17 +37,28 @@ public class BankAccount{
             throw new IllegalArgumentException("Account is closed");
         }else{
             String depositDate = new Date().toString();
-            String transactionEntry = "deposit $" + depositAmount + " at " + depositDate;
+            String transactionEntry = "deposit $" + depositAmount + " at " + depositDate + "\n";
             setTransactions(transactionEntry);
             setAccountBalance(depositAmount);
-            System.out.printf("deposit $%d at %s", depositAmount, depositDate);
+            System.out.println(transactionEntry);
         }
     }
 
     public void withdraw(Float withdrawalAmount){
-
+        if (withdrawalAmount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be greater than zero");
+        }else if(this.accountStatus == false){
+            throw new IllegalArgumentException("Account is closed");
+        }else{
+            String withdrawalDate = new Date().toString();
+            String transactionEntry = "withdraw $" + withdrawalAmount + " at " + withdrawalDate + "\n";
+            setTransactions(transactionEntry);
+            setAccountBalance(-withdrawalAmount);
+            System.out.println(transactionEntry);
+        }
 
     }
+    //getters and setters ================================================================
 
     public String getAccountHolderName() {
         return this.accountHolderName;
@@ -58,7 +78,7 @@ public class BankAccount{
     }
 
     public Float getAccountBalance() {
-        return accountBalance;
+        return this.accountBalance;
     }
 
     public void setAccountBalance(Float depositAmount) {
